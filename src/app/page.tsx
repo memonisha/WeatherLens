@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 
 type WeatherData = {
   name: string
@@ -26,9 +27,10 @@ export default function Home() {
       if (!res.ok) throw new Error('City not found')
       const data = await res.json()
       setWeather(data)
-    } catch (err: any) {
+    } catch (err: unknown) {
       setWeather(null)
-      setError(err.message)
+      if (err instanceof Error) setError(err.message)
+      else setError('Unknown error occurred')
     }
   }
 
@@ -90,31 +92,31 @@ export default function Home() {
       </div>
 
       {/* Error message */}
-      {error && (
-        <p className="text-red-600 font-semibold mb-6">{error}</p>
-      )}
+      {error && <p className="text-red-600 font-semibold mb-6">{error}</p>}
 
       {/* Weather info card */}
       {weather && (
-        <div className="bg-white bg-opacity-90 text-blue-900 rounded-3xl p-10 shadow-2xl w-full max-w-3xl mx-auto animate-fadeIn">
-          <h2 className="text-4xl font-extrabold mb-3">{weather.name}</h2>
-          <p className="capitalize mb-3 text-2xl flex items-center justify-center gap-3">
+        <div className="bg-white bg-opacity-90 text-blue-900 rounded-3xl p-12 shadow-2xl w-full max-w-4xl mx-auto animate-fadeIn">
+          <h2 className="text-5xl font-extrabold mb-5">{weather.name}</h2>
+          <p className="capitalize mb-5 text-3xl flex items-center justify-center gap-4">
             {weather.weather[0].description}
-            <img
+            <Image
               src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
               alt={weather.weather[0].description}
+              width={64}
+              height={64}
               className="inline-block"
             />
           </p>
-          <p className="text-2xl mb-2">🌡️ Temperature: {weather.main.temp} °C</p>
-          <p className="mb-2 text-xl">💧 Humidity: {weather.main.humidity}%</p>
-          <p className="mb-4 text-xl">🌬️ Wind Speed: {weather.wind.speed} m/s</p>
+          <p className="text-3xl mb-3">🌡️ Temperature: {weather.main.temp} °C</p>
+          <p className="mb-3 text-2xl">💧 Humidity: {weather.main.humidity}%</p>
+          <p className="mb-6 text-2xl">🌬️ Wind Speed: {weather.wind.speed} m/s</p>
 
           {/* Embedded Google Map */}
           <iframe
             title="map"
             width="100%"
-            height="350"
+            height="400"
             className="rounded-xl"
             src={`https://maps.google.com/maps?q=${weather.coord.lat},${weather.coord.lon}&z=10&output=embed`}
             loading="lazy"
