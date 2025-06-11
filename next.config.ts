@@ -12,9 +12,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    allowedDevOrigins: ['http://192.168.1.4:3000', 'http://localhost:3000', 'https://weatherlens.vercel.app/'], // change to your local dev URL
-  },
+  // experimental: {
+  //   allowedDevOrigins: ['http://192.168.1.4:3000', 'http://localhost:3000', 'https://weatherlens.vercel.app/'], // change to your local dev URL
+  // },
 }
 
 export default nextConfig
